@@ -8,14 +8,16 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        // greedy point -> when the result get negative drop
+        int sum = 0;
         int res = INT_MIN;
-        int cur = 0;
         for(int i = 0; i < nums.size(); i++) {
-            cur += nums[i];
-            res = res > cur ? res : cur;
-
-            if(cur < 0) cur = 0;
+            if(sum < 0) {
+                sum = nums[i];
+            } else {
+                sum += nums[i];
+            }
+            res = res > sum ? res : sum;
+            
         }
         return res;
     }

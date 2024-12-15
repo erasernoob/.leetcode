@@ -10,6 +10,7 @@ public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         // 实现单调队列
         vector<int> res;
+        
         deque<int> q;
         for (size_t i = 0; i < k; i++) {
             while(!q.empty() && nums[i] > q.back()) {
