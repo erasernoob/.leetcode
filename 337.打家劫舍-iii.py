@@ -13,21 +13,33 @@
 #         self.right = right
 class Solution:
     def rob(self, root: Optional[TreeNode]) -> int:
-       # dp[0, 1] 代表的是偷父亲，或者不偷
-        def rob_range(root: Optional[TreeNode]):
-            # 后序遍历
-            if root == None: return [0, 0]
-            val_left = rob_range(root.left)
-            val_right = rob_range(root.right)
-            # 偷 or 不偷
-            val_root = [0] * 2
-            # 不偷
-            val_root[0] = max(val_right) + max(val_left) 
-            # 偷 不偷左右孩
-            val_root[1] = val_left[0] + val_right[0] + root.val
+        # 状态：父节点偷还是不偷
+        # dp[2] = [0, 1] 代表的是偷得到的最大值， 和不偷得到的最大值
 
-            return val_root
-        return max(rob_range(root))
+        memory = {}
+        # 使用常规的树的后序遍历来做
+        def recur_rob(node: Optional[TreeNode]):
+            if node == None: return 0
+            if node.left == None and node.right == None: return node.val
+            if node in memory:
+                return memory[node]
+
+            val_root_1 = node.val
+            if node.left != None:
+                val_root_1 += recur_rob(node.left.right) + recur_rob(node.left.left)
+
+            if node.right != None:
+                val_root_1 += recur_rob(node.right.left) + recur_rob(node.right.right)
+            
+            val_root_2 = recur_rob(node.left) + recur_rob(node.right)
+            
+            memory[node] = max(val_root_2, val_root_1)
+            return memory[node]
+
+        return recur_rob(root)
+
+
+
 
 
 
